@@ -1,8 +1,6 @@
 class Expression {
-    static let E: P<Int> = rule {
-        A
-    }
-    static let A: P<Int> = rule{
+    static let E: P<Int> = rule { A }
+    static let A: P<Int> = rule {
         (M + ((s(literal:"+") + M) | (s(literal:"-") + M)).rep0()).map{v in
             let (l, rs) = v
             return rs.reduce(l, {(l, b) in
@@ -11,7 +9,7 @@ class Expression {
             })
         }
     }
-    static let M: P<Int> = rule{
+    static let M: P<Int> = rule {
         (P + ((s(literal:"*") + P) | (s(literal:"/") + P)).rep0()).map{v in
             let (l, rs) = v
             return rs.reduce(l, {(l, b) in
@@ -20,7 +18,7 @@ class Expression {
             })
         }
     }
-    static let P: P<Int> = rule{
+    static let P: P<Int> = rule {
         (
             (s(literal:"(") + E + s(literal:")")).map {v in
                 let ((_, r), _) = v
@@ -28,11 +26,9 @@ class Expression {
             }
         |   N)
     }
-    static let N: P<Int> = rule{
-        Digit.map(translator: {v in Int(v)!})
-    }
+    static let N: P<Int> = rule { Digit.map { Int($0)! } }
 
-    static let Digit: Parser<String> = rule{
+    static let Digit: Parser<String> = rule {
         s(literal:"0") | s(literal:"1") | s(literal:"2") | s(literal:"3") | s(literal:"4")
       | s(literal:"5") | s(literal:"6") | s(literal:"7") | s(literal:"8") | s(literal:"9")
     }
