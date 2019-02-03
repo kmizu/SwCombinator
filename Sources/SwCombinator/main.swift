@@ -5,16 +5,16 @@ class Expression {
     static let A: P<Int> = rule{
         (M + ((s(literal:"+") + M) | (s(literal:"-") + M)).rep0()).map{v in
             let (l, rs) = v
-            return rs.reduce(l, {(l:Int, b:(String, Int)) in
+            return rs.reduce(l, {(l, b) in
                 let (op, r) = b
                 return op == "+" ? l + r : l - r
             })
         }
     }
     static let M: P<Int> = rule{
-        (P + ((s(literal:"*") + P) | (s(literal:"/") + P)).rep0()).map{(v) in
+        (P + ((s(literal:"*") + P) | (s(literal:"/") + P)).rep0()).map{v in
             let (l, rs) = v
-            return rs.reduce(l, {(l:Int, b:(String, Int)) in
+            return rs.reduce(l, {(l, b) in
                 let (op, r) = b
                 return op == "*" ? l * r : l / r
             })
@@ -22,7 +22,7 @@ class Expression {
     }
     static let P: P<Int> = rule{
         (
-            (s(literal:"(") + E + s(literal:")")).map {(v) in
+            (s(literal:"(") + E + s(literal:")")).map {v in
                 let ((_, r), _) = v
                 return r
             }
